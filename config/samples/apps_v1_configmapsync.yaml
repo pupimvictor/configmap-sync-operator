@@ -2,8 +2,29 @@ apiVersion: apps.pupimvictor.com/v1
 kind: ConfigMapSync
 metadata:
   labels:
-    app.kubernetes.io/name: configmap-sync-operator
+    app.kubernetes.io/name: configmapsync
+    app.kubernetes.io/instance: configmapsync-sample
+    app.kubernetes.io/part-of: configmapsync
     app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: configmapsync
   name: configmapsync-sample
 spec:
-  # TODO(user): Add fields here
+  sourceNamespace: "srcns"
+  destinationNamespace: "dstns"
+  configMapName: "my-config"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: configmap-sync
+  namespace: dstns
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: configmap-admin
+subjects:
+- kind: ServiceAccount
+  name: configmap-sync-operator-controller-manager
+  namespace: configmap-sync-operator-system
+
+
