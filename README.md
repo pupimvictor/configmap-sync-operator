@@ -20,6 +20,24 @@ kubectl create ns srcns
 kubectl create ns dstns
 kubectl apply -f config/samples/apps_v1_configmapsync.yaml
 ```
+sample config:
+```yml
+apiVersion: apps.pupimvictor.com/v1
+kind: ConfigMapSync
+metadata:
+  labels:
+    app.kubernetes.io/name: configmapsync
+    app.kubernetes.io/instance: configmapsync-sample
+    app.kubernetes.io/part-of: configmapsync
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: configmapsync
+  name: configmapsync-sample
+spec:
+  sourceNamespace: "srcns"
+  destinationNamespace: "dstns"
+  configMapName: "my-config"
+```
+
 
 Test
 ```sh
