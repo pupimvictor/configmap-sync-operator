@@ -1,8 +1,32 @@
 # configmap-sync-operator
-// TODO(user): Add simple overview of use/purpose
+Specialized operator known as `ConfigmapSync`. This operator is designed to seamlessly synchronize config maps from one namespace to others within a cluster.
 
 ## Description
-// TODO(user): An in-depth paragraph about your project and overview of use
+This operator was created as part of my learning process about k8s Operators.
+
+#### To test, git clone the repo and:
+
+Install the Operator
+```sh
+kubebuilder create api --group apps --version v1 --kind ConfigMapSync
+
+make docker-build docker-push IMG=registry/configmapsync-operator:latest
+make deploy IMG=registry/configmapsync-operator:latest
+```
+
+Create the namespaces and Deploy the ConfigMapSync configuration
+```sh
+kubectl create ns srcns
+kubectl create ns dstns
+kubectl apply -f config/samples/apps_v1_configmapsync.yaml
+```
+
+Test
+```sh
+kubectl get cm -n dstns # no synced cms
+kubectl create configmap my-config -n srcns --from-literal=key=val # create in source ns
+kubectl get cm -n dstns # my-config cm is present, synced from srcns
+```
 
 ## Getting Started
 
